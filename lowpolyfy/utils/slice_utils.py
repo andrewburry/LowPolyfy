@@ -76,5 +76,5 @@ def find_tetrahedral_frame_intersections(corners, frame_number):
 
     # Remove any duplicate points
     intersections = list(dict.fromkeys(intersections))
-
+    
     return intersections

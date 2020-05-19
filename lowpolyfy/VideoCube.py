@@ -1,7 +1,10 @@
+import logging
 from scipy.spatial import Delaunay
 from numpy import zeros, int32, uint8
 from cv2 import fillPoly, mean
 from lowpolyfy.utils.slice_utils import find_tetrahedral_frame_intersections
+
+logger = logging.getLogger(__name__)
 
 class VideoCube():
     def __init__(self, num_frames, width, height):
@@ -26,7 +29,7 @@ class VideoCube():
         return
 
     def tetrahedralize(self):
-        print("Performing tetrahedralization")
+        logger.info("Performing tetrahedralization on the video cube.")
         simplices = Delaunay(self._points).simplices
         
         # Simplices are indices of each triangle vertex
@@ -42,7 +45,7 @@ class VideoCube():
         # We are only concerned about the tetrahedrals now.
         del self._points
 
-        print("Created " + str(len(self._tetrahedrals)) + " tetrahedrals in the video cube.")
+        logger.info("Created {} tetrahedrals in the video cube".format(len(self._tetrahedrals)))
         return
 
     def _remove_temporal_dimension(self, polygon):
@@ -65,15 +68,17 @@ class VideoCube():
     def slice_cube(self, frame, frame_number):
         # Now that I have converted each of the simplices, 
         # I can now start walking the video cube temporally
-        print("Processing frame number: " + str(frame_number + 1) + "/" + str(self.num_frames))
+        logger.info("Processing frame number {}/{}.".format(frame_number + 1, self.num_frames))
 
         polygons = []
         # Find the intersection of the frame and the tetrahedrals
         for tetrahedral in self._tetrahedrals:
             pnts = find_tetrahedral_frame_intersections(tetrahedral, frame_number)
+            logger.info("Found {} intersection points for tetrahedral {}".format(len(pnts), tetrahedral))
             if pnts:
                 polygons.append(pnts)
-
+        
+        logger.info("Drawing polygons on the low-poly frame.")
         lp_frame = frame.copy()
         for polygon in polygons:
             # Reduce the dimensionality of the polygon. We know the intersection 
@@ -90,4 +95,5 @@ class VideoCube():
             # Fill the polygon on the lp frame with the average color of the mask
             fillPoly(lp_frame, pts=polygon, color=(r,g,b))
 
+        logger.info("Created low-poly frame.")
         return lp_frame

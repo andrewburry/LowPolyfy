@@ -1,5 +1,8 @@
 from numpy.random import randint
 from lowpolyfy.pointplacement.AbstractAlgorithm import AbstractAlgorithm
+import logging
+
+logger = logging.getLogger(__name__)
 
 class PointsRandom(AbstractAlgorithm):
 
@@ -11,11 +14,13 @@ class PointsRandom(AbstractAlgorithm):
         ]
 
     def generate_points(self, dimensions, num_points):
+        logger.info("Generating {} random points within a space of dimension {}".format(num_points, dimensions))
         l, w, h = dimensions
 
         points = []
 
         for i in range(num_points):
-            points.append(self._generate_point(l, w, h))
+            point = self._generate_point(l, w, h)
+            points.append(point)
 
         return points
