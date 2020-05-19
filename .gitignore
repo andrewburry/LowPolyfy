@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# VS code
+.vscode
+
+# mp4 files
+*.mp4
