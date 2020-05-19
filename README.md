@@ -1,5 +1,5 @@
 # LowPolyfy
-Low-poly object representations have become very popular art style in recent years. This technique decomposes an image into a mesh of connected triangles. Delaunay triangulation is a well known algorithm which can perform this abstraction. Typical algorithms for creating low-poly image representations involve feature detection followed by Delaunay triangulation.
+Low-poly object representations have become very popular art style in recent years. This technique decomposes an image into a mesh of connected polygons. Delaunay triangulation is a well known algorithm which can perform this abstraction. Typical algorithms for creating low-poly image representations involve feature detection followed by Delaunay triangulation.
 
 ![Parakeet](https://i.imgur.com/uTHlhGl.jpg) ![Parakeet Low Poly](https://i.imgur.com/8mc7zi2.png)
 
@@ -8,8 +8,8 @@ This methodology has also been applied for videos, which performs feature detect
 LowPolyfy is an application which creates low-poly approximations of video footage using Delaunay tetrahedralization.
 
 For this research project, I will do two thing:
-1) Create a framework which can create low-poly approximations based on a point-placement algorithm
-2) Investigate point placement algorithms
+1) Design a framework which can create low-poly approximations based on a specified point-placement algorithm
+2) Investigate and design several point placement modules.
 
 ## Installation:
 1. Clone the repository
