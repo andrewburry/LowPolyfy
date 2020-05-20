@@ -14,7 +14,7 @@ def setup_logger():
     # Set up the root logger
     LOG_FORMAT = "[%(levelname)s %(asctime)s] %(name)s - %(message)s"
     logging.basicConfig(filename = LOG_DIRECTORY + "/" + LOG_NAME,
-                        level = logging.DEBUG,
+                        level = logging.INFO,
                         format = LOG_FORMAT,
                         filemode = 'w')
 

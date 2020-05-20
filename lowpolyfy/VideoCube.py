@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 from scipy.spatial import Delaunay
 from numpy import zeros, int32, uint8
 from cv2 import fillPoly, mean
@@ -52,7 +53,7 @@ class VideoCube():
         # Discard the time dimension
         frame_polygons = []
         for point in polygon:
-            frame_polygons.append([point.y, point.z])
+            frame_polygons.append([point[1], point[2]])
 
         # Filling polygons of dimensions n=1,2,3 are point order independent.
         # For the case where there are four intersection points, we have to
@@ -63,7 +64,7 @@ class VideoCube():
             frame_polygons[2] = frame_polygons[3]
             frame_polygons[3] = tmp
         
-        return int32([frame_polygons])
+        return np.array([frame_polygons])
 
     def slice_cube(self, frame, frame_number):
         # Now that I have converted each of the simplices, 
@@ -74,7 +75,7 @@ class VideoCube():
         # Find the intersection of the frame and the tetrahedrals
         for tetrahedral in self._tetrahedrals:
             pnts = find_tetrahedral_frame_intersections(tetrahedral, frame_number)
-            logger.info("Found {} intersection points for tetrahedral {}".format(len(pnts), tetrahedral))
+            logger.debug("Found {} intersection points for tetrahedral {}".format(len(pnts), tetrahedral))
             if pnts:
                 polygons.append(pnts)
         

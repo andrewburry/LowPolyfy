@@ -39,7 +39,7 @@ class LowPolyfy():
 
         # Setting up video writer
         fourcc = VideoWriter_fourcc(*'DIVX')
-        video_out = VideoWriter("output.mp4", fourcc, fps, (video_width, video_height))
+        video_out = VideoWriter("output.mp4", fourcc, fps, (video_height, video_width))
         
         # Initialize the video cube according to the point initialization algorithm
         # Exit if points failed to be placed
