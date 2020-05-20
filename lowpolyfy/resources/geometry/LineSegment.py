@@ -2,7 +2,7 @@ class LineSegment():
     def __init__(self, p0, p1):
         self.p0 = p0
         self.p1 = p1
-
+    
     def intersection(self, x):
         x0, y0, z0 = tuple(self.p0)
         x1, y1, z1 = tuple(self.p1)

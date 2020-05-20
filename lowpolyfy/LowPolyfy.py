@@ -1,8 +1,8 @@
 import logging
 from cv2 import VideoCapture, VideoWriter, VideoWriter_fourcc, imshow
-from lowpolyfy.utils.video_utils import video_exists, get_video_parameters
-from lowpolyfy.VideoCube import VideoCube
-from lowpolyfy.pointplacement.PointPlacer import PointPlacer
+from lowpolyfy.resources.utils.video_utils import video_exists, get_video_parameters
+from lowpolyfy.resources.videocube.VideoCube import VideoCube
+from lowpolyfy.resources.pointplacement.PointPlacer import PointPlacer
 
 logger = logging.getLogger(__name__)
 

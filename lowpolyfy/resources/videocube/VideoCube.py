@@ -1,9 +1,9 @@
 import logging
-import numpy as np
+from numpy import array
 from scipy.spatial import Delaunay
 from numpy import zeros, int32, uint8
 from cv2 import fillPoly, mean
-from lowpolyfy.utils.slice_utils import find_tetrahedral_frame_intersections
+from lowpolyfy.resources.geometry.Tetrahedral import Tetrahedral
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ class VideoCube():
             frame_polygons[2] = frame_polygons[3]
             frame_polygons[3] = tmp
         
-        return np.array([frame_polygons])
+        return array([frame_polygons])
 
     def slice_cube(self, frame, frame_number):
         # Now that I have converted each of the simplices, 
@@ -73,9 +73,9 @@ class VideoCube():
 
         polygons = []
         # Find the intersection of the frame and the tetrahedrals
-        for tetrahedral in self._tetrahedrals:
-            pnts = find_tetrahedral_frame_intersections(tetrahedral, frame_number)
-            logger.debug("Found {} intersection points for tetrahedral {}".format(len(pnts), tetrahedral))
+        for corners in self._tetrahedrals:
+            pnts = Tetrahedral(corners).intersection(frame_number)
+            logger.info("Found {} intersection points for tetrahedral {}".format(len(pnts), corners))
             if pnts:
                 polygons.append(pnts)
         

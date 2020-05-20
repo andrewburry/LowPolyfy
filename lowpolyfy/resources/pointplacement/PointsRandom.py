@@ -1,5 +1,5 @@
 from numpy.random import randint
-from lowpolyfy.pointplacement.AbstractAlgorithm import AbstractAlgorithm
+from lowpolyfy.resources.pointplacement.AbstractAlgorithm import AbstractAlgorithm
 import logging
 
 logger = logging.getLogger(__name__)

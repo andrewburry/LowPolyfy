@@ -1,4 +1,4 @@
-from lowpolyfy.pointplacement.PointsRandom import PointsRandom
+from lowpolyfy.resources.pointplacement.PointsRandom import PointsRandom
 import logging
 
 logger = logging.getLogger(__name__)
