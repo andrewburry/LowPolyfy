@@ -24,6 +24,7 @@ class VideoCube():
             [num_frames, width, 0],
             [num_frames, width, height]
         ]
+        self._mask = zeros([height, width], uint8)
 
     def add_points(self, points):
         self._points += points
@@ -37,10 +38,10 @@ class VideoCube():
         # Convert indices to points
         self._tetrahedrals = []
         for simplex in simplices:
-            point = []
+            corners = []
             for index in simplex:
-                point.append(self._points[index])
-            self._tetrahedrals.append(point)
+                corners.append(self._points[index])
+            self._tetrahedrals.append(Tetrahedral(corners))
 
         # Clean up the points that were placed in the video cube.
         # We are only concerned about the tetrahedrals now.
@@ -71,15 +72,16 @@ class VideoCube():
         # I can now start walking the video cube temporally
         logger.info("Processing frame number {}/{}.".format(frame_number + 1, self.num_frames))
 
+        # TODO: bring this out to reduce time
         polygons = []
         # Find the intersection of the frame and the tetrahedrals
-        for corners in self._tetrahedrals:
-            pnts = Tetrahedral(corners).intersection(frame_number)
-            logger.info("Found {} intersection points for tetrahedral {}".format(len(pnts), corners))
+        for tetrahedral in self._tetrahedrals:
+            pnts = tetrahedral.intersection(frame_number)
+            logger.debug("Found {} intersection points for tetrahedral {}".format(len(pnts), tetrahedral))
             if pnts:
                 polygons.append(pnts)
         
-        logger.info("Drawing polygons on the low-poly frame.")
+        logger.info("Drawing {} polygons on the low-poly frame.".format(len(polygons)))
         lp_frame = frame.copy()
         for polygon in polygons:
             # Reduce the dimensionality of the polygon. We know the intersection 
@@ -87,14 +89,13 @@ class VideoCube():
             polygon = self._remove_temporal_dimension(polygon)
 
             # Create a mask with the polygon
-            mask = zeros(frame.shape[:2], uint8)
-            fillPoly(mask, pts=polygon, color=(255,255,255))
+            fillPoly(self._mask, pts=polygon, color=(255,255,255))
             
             # Fetch the average color in within the mask
-            r, g, b, _ = [int(_) for _ in mean(frame, mask=mask)]
-
+            r, g, b, _ = [round(_) for _ in mean(frame, mask=self._mask)]
             # Fill the polygon on the lp frame with the average color of the mask
             fillPoly(lp_frame, pts=polygon, color=(r,g,b))
-
+            fillPoly(self._mask, pts=polygon, color=(0,0,0))
+            
         logger.info("Created low-poly frame.")
         return lp_frame

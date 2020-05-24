@@ -21,4 +21,4 @@ class LineSegment():
         z = z0 + t * (z1 - z0)
 
         # Build the intersection point
-        return [[int(x), int(y), int(z)]]
+        return [[round(x), round(y), round(z)]]

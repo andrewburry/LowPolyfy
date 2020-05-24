@@ -7,7 +7,6 @@ from lowpolyfy.resources.pointplacement.PointPlacer import PointPlacer
 logger = logging.getLogger(__name__)
 
 class LowPolyfy():
-
     def _initialize_point_placer(self, algorithm, video_cube, num_points):
         # Create the point placer
         logger.info("Creating the point placer object.")
@@ -38,7 +37,7 @@ class LowPolyfy():
         vc = VideoCube(num_frames, video_height, video_width)
 
         # Setting up video writer
-        fourcc = VideoWriter_fourcc(*'DIVX')
+        fourcc = VideoWriter_fourcc(*'mp4v')
         video_out = VideoWriter("output.mp4", fourcc, fps, (video_height, video_width))
         
         # Initialize the video cube according to the point initialization algorithm
