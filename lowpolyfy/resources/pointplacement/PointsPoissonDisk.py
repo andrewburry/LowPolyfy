@@ -1,5 +1,6 @@
 from numpy.random import randint
 from lowpolyfy.resources.pointplacement.AbstractAlgorithm import AbstractAlgorithm
+from lowpolyfy.resources.pointplacement.BoxBinner import BoxBinner
 import logging
 from cv2 import goodFeaturesToTrack, CAP_PROP_POS_FRAMES, cvtColor, COLOR_BGR2GRAY
 import numpy as np
@@ -39,12 +40,16 @@ class PointsPoissonDisk(AbstractAlgorithm):
         return points
 
     def generate_points(self, dimensions, num_points, video):
-        logger.info("Generating {} random points within a space of dimension {}".format(num_points, dimensions))
+        logger.info("Generating {} points within a space of dimension {}".format(num_points, dimensions))
         l, w, h = dimensions
 
         # Generate points from features in the video
         points = self._generate_points_from_features(video)
 
         # TODO: Place points into boxes and pick a point from the bins to survive
+        binner = BoxBinner(l, w, h, num_points)
+
+        # 
+        points = binner.filter_points(points)
 
         return points
