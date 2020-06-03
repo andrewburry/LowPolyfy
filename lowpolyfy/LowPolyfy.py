@@ -7,10 +7,10 @@ from lowpolyfy.resources.pointplacement.PointPlacer import PointPlacer
 logger = logging.getLogger(__name__)
 
 class LowPolyfy():
-    def _initialize_point_placer(self, algorithm, video_cube, num_points):
+    def _initialize_point_placer(self, algorithm, video_cube, num_points, video):
         # Create the point placer
         logger.info("Creating the point placer object.")
-        placer = PointPlacer()
+        placer = PointPlacer(video)
 
         # Set the point placement algorithm
         logger.info("Setting the placement algorithm to be {}.".format(algorithm))
@@ -42,7 +42,7 @@ class LowPolyfy():
         
         # Initialize the video cube according to the point initialization algorithm
         # Exit if points failed to be placed
-        if not self._initialize_point_placer(algorithm, vc, num_points):
+        if not self._initialize_point_placer(algorithm, vc, num_points, video):
             logger.error("Point placement failed to initialize.")
             return
 

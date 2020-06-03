@@ -5,7 +5,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 class PointsRandom(AbstractAlgorithm):
-
     def _generate_point(self, length, width, height):
         return [
             randint(0, length),
@@ -13,7 +12,7 @@ class PointsRandom(AbstractAlgorithm):
             randint(0, height),
         ]
 
-    def generate_points(self, dimensions, num_points):
+    def generate_points(self, dimensions, num_points, video):
         logger.info("Generating {} random points within a space of dimension {}".format(num_points, dimensions))
         l, w, h = dimensions
 

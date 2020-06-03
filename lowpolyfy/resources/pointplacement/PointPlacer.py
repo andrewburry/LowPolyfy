@@ -1,14 +1,17 @@
 from lowpolyfy.resources.pointplacement.PointsRandom import PointsRandom
+from lowpolyfy.resources.pointplacement.PointsPoissonDisk import PointsPoissonDisk
 import logging
 
 logger = logging.getLogger(__name__)
 
 class PointPlacer():
-    def __init__(self):
+    def __init__(self, video):
         self._ALGORTIHMS = {
-            "random": PointsRandom
+            "random": PointsRandom,
+            "poisson": PointsPoissonDisk
         }
         self._algorithm = None
+        self.video = video
 
     def set_algorithm(self, name):
         if (name not in self._ALGORTIHMS.keys()):
@@ -22,5 +25,5 @@ class PointPlacer():
         if not self._algorithm:
             logger.eror("You must first set an algorithm to run.")
             return
-        points = self._algorithm().generate_points(video_cube.dimensions, num_points)        
+        points = self._algorithm().generate_points(video_cube.dimensions, num_points, self.video)
         video_cube.add_points(points)
