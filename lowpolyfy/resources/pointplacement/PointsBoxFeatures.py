@@ -7,7 +7,7 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
-class PointsPoissonDisk(AbstractAlgorithm):
+class PointsBoxFeatures(AbstractAlgorithm):
 
     def __init__(self):
         self.maxCorners = 1000
@@ -46,10 +46,10 @@ class PointsPoissonDisk(AbstractAlgorithm):
         # Generate points from features in the video
         points = self._generate_points_from_features(video)
 
-        # TODO: Place points into boxes and pick a point from the bins to survive
+        # Create the box binner
         binner = BoxBinner(l, w, h, num_points)
 
-        # 
+        # Place points into boxes
         points = binner.filter_points(points)
 
         return points

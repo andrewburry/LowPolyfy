@@ -1,5 +1,6 @@
 from lowpolyfy.resources.pointplacement.PointsRandom import PointsRandom
-from lowpolyfy.resources.pointplacement.PointsPoissonDisk import PointsPoissonDisk
+from lowpolyfy.resources.pointplacement.PointsBoxFeatures import PointsBoxFeatures
+from lowpolyfy.resources.pointplacement.PointsBoxRandom import PointsBoxRandom
 import logging
 
 logger = logging.getLogger(__name__)
@@ -8,7 +9,8 @@ class PointPlacer():
     def __init__(self, video):
         self._ALGORTIHMS = {
             "random": PointsRandom,
-            "poisson": PointsPoissonDisk
+            "boxfeature": PointsBoxFeatures,
+            "boxrandom": PointsBoxRandom
         }
         self._algorithm = None
         self.video = video

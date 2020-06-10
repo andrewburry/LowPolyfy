@@ -1,9 +1,7 @@
-
-import numpy as np
-from lowpolyfy.resources.pointplacement.TestObject import TestObject
 from math import floor, ceil
-import logging
 from random import uniform
+import numpy as np
+import logging
 
 
 logger = logging.getLogger(__name__)

@@ -39,6 +39,9 @@ class LowPolyfy():
         # Setting up video writer
         fourcc = VideoWriter_fourcc(*'mp4v')
         video_out = VideoWriter("output.mp4", fourcc, fps, (video_height, video_width))
+        video_out_lines = VideoWriter("output_view_lines.mp4", fourcc, fps, (video_height, video_width))
+        video_out_corners = VideoWriter("output_view_corners.mp4", fourcc, fps, (video_height, video_width))
+        video_out_keypoints = VideoWriter("output_view_keypoints.mp4", fourcc, fps, (video_height, video_width))
         
         # Initialize the video cube according to the point initialization algorithm
         # Exit if points failed to be placed
@@ -60,14 +63,20 @@ class LowPolyfy():
                 break
 
             # Slice the video cube at this frame and create a low poly frame
-            frame_lp = vc.slice_cube(frame, frame_number)
+            frame_lp, frame_lp_lines, frame_lp_corners, lp_frame_keypoints = vc.slice_cube(frame, frame_number)
             frame_number += 1
 
             # Write the low poly frame
             video_out.write(frame_lp)
+            video_out_lines.write(frame_lp_lines)
+            video_out_corners.write(frame_lp_corners)
+            video_out_keypoints.write(lp_frame_keypoints)
 
         # Release video reader and writer
         video_out.release()
+        video_out_lines.release()
+        video_out_corners.release()
+        video_out_keypoints.release()
         video.release()
         
 

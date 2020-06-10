@@ -2,7 +2,7 @@ import logging
 from numpy import array
 from scipy.spatial import Delaunay
 from numpy import zeros, int32, uint8
-from cv2 import fillPoly, mean
+from cv2 import fillPoly, polylines, circle, mean
 from lowpolyfy.resources.geometry.Tetrahedral import Tetrahedral
 
 logger = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ class VideoCube():
 
         # Clean up the points that were placed in the video cube.
         # We are only concerned about the tetrahedrals now.
-        del self._points
+        #del self._points
 
         logger.info("Created {} tetrahedrals in the video cube".format(len(self._tetrahedrals)))
         return
@@ -83,19 +83,43 @@ class VideoCube():
         
         logger.info("Drawing {} polygons on the low-poly frame.".format(len(polygons)))
         lp_frame = frame.copy()
+        lp_frame_lines = frame.copy()
+        lp_frame_points = frame.copy()
+        lp_frame_key_points = frame.copy()
         for polygon in polygons:
             # Reduce the dimensionality of the polygon. We know the intersection 
             # is for this frame number 
             polygon = self._remove_temporal_dimension(polygon)
 
+            # Mask view
             # Create a mask with the polygon
             fillPoly(self._mask, pts=polygon, color=(255,255,255))
-            
             # Fetch the average color in within the mask
             r, g, b, _ = [round(_) for _ in mean(frame, mask=self._mask)]
             # Fill the polygon on the lp frame with the average color of the mask
             fillPoly(lp_frame, pts=polygon, color=(r,g,b))
             fillPoly(self._mask, pts=polygon, color=(0,0,0))
+
+            # Line view
+            # Draw the polygon lines on line view
+            polylines(lp_frame_lines, pts=polygon, isClosed=True, color=(0, 0, 0))
+
+            for point in polygon:
+                circle(lp_frame_points, tuple(point[0]), 2, (0, 0, 0))
+
+        
+        lp_frame_key_points = self._draw_key_points(lp_frame_key_points, frame_number)
+
             
         logger.info("Created low-poly frame.")
+        return (lp_frame, lp_frame_lines, lp_frame_points, lp_frame_key_points)
+
+    def _draw_key_points(self, lp_frame, frame_number):
+        
+        # Find points on this frame number and remove the temporal dimension
+        for point in self._points:
+            if point[0] == frame_number:
+                circle(lp_frame, (point[1], point[2]), 10, (0,0,0))
+
         return lp_frame
+
