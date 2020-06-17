@@ -1,6 +1,6 @@
-from lowpolyfy.resources.pointplacement.PointsRandom import PointsRandom
-from lowpolyfy.resources.pointplacement.PointsBoxFeatures import PointsBoxFeatures
-from lowpolyfy.resources.pointplacement.PointsBoxRandom import PointsBoxRandom
+from lowpolyfy.resources.pointplacement.random.PointsRandom import PointsRandom
+from lowpolyfy.resources.pointplacement.box.v1.PointsBoxFeatures import PointsBoxFeatures
+from lowpolyfy.resources.pointplacement.box.v1.PointsBoxRandom import PointsBoxRandom
 import logging
 
 logger = logging.getLogger(__name__)
