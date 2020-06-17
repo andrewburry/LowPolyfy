@@ -8,12 +8,6 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 class PointsBoxRandom(AbstractAlgorithm):
-
-    def __init__(self):
-        self.maxCorners = 1000
-        self.qualityLevel = 0.0001
-        self.minDistance = 10
-
     def generate_points(self, dimensions, num_points, video):
         logger.info("Generating {} points within a space of dimension {}".format(num_points, dimensions))
         l, w, h = dimensions
