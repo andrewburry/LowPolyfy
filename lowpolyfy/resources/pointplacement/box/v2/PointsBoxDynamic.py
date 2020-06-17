@@ -1,26 +1,24 @@
 
 from lowpolyfy.resources.pointplacement.box.v2.DynamicBoxBinner import DynamicBoxBinner
+from lowpolyfy.resources.pointplacement.box.utils.FeaturePointCollector import FeaturePointCollector
 import logging
 
 logger = logging.getLogger(__name__)
 
 class PointsBoxDynamic():
-    def __init__(self):
-        self.maxCorners = 1000
-        self.qualityLevel = 0.0001
-        self.minDistance = 10
-
     def generate_points(self, dimensions, num_points, video):
-        logger.info("Generating {} points within a space of dimension {}".format(num_points, dimensions))
         l, w, h = dimensions
 
-        # Start with no points
-        points = []
-
+        # Generate points from features in the video
+        points = FeaturePointCollector().generate_keypoints_from_features(video)
+        logger.info("Generated {} feature points within the video cube of dimensions".format(len(points), dimensions))
         # Create the box binner
         binner = DynamicBoxBinner(l, w, h)
+        
 
-        # Place points into boxes
+        # Place points into the binner
+        logger.info("Inserting {} points into the box binner".format(len(points)))
         points = binner.filter_points(points)
+        logger.info("Returning {} points from the box binner".format(len(points)))
 
         return points
