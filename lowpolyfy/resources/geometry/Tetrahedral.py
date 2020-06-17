@@ -7,6 +7,14 @@ class Tetrahedral():
         self.corners = corners
         self._create_tetrahedral_line_segments(corners)
 
+    def frames_intersected(self):
+        points = []
+        for line in self.lines:
+            points += line.frames_intersected()
+        
+        # Remove duplicates
+        return list(dict.fromkeys(points))
+
     def _create_tetrahedral_line_segments(self, corners):
         # Take every combination of corner points of length 2
         point_combinations = list(combinations(corners, 2))

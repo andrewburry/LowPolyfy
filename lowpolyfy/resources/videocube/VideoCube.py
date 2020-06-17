@@ -4,7 +4,7 @@ from scipy.spatial import Delaunay
 from numpy import zeros, int32, uint8
 from cv2 import fillPoly, polylines, circle, mean
 from lowpolyfy.resources.geometry.Tetrahedral import Tetrahedral
-
+from lowpolyfy.resources.videocube.TetrahedralOrganizer import TetrahedralOrganizer
 logger = logging.getLogger(__name__)
 
 class VideoCube():
@@ -12,6 +12,8 @@ class VideoCube():
         # Retain the dimensions of the video cube
         self.num_frames = num_frames
         self.dimensions = (num_frames, width, height)
+        self.height = height
+        self.width = width
 
         # Store the corners of the video cube
         self._points = [
@@ -25,6 +27,7 @@ class VideoCube():
             [num_frames, width, height]
         ]
         self._mask = zeros([height, width], uint8)
+        self._organizer = TetrahedralOrganizer(num_frames)
 
     def add_points(self, points):
         self._points += points
@@ -42,6 +45,8 @@ class VideoCube():
             for index in simplex:
                 corners.append(self._points[index])
             self._tetrahedrals.append(Tetrahedral(corners))
+
+        self._organizer.insert(self._tetrahedrals)
 
         # Clean up the points that were placed in the video cube.
         # We are only concerned about the tetrahedrals now.
@@ -74,8 +79,10 @@ class VideoCube():
 
         # TODO: bring this out to reduce time
         polygons = []
+        frame_tets = self._organizer.bins[frame_number]
+
         # Find the intersection of the frame and the tetrahedrals
-        for tetrahedral in self._tetrahedrals:
+        for tetrahedral in frame_tets:
             pnts = tetrahedral.intersection(frame_number)
             logger.debug("Found {} intersection points for tetrahedral {}".format(len(pnts), tetrahedral))
             if pnts:
@@ -86,33 +93,34 @@ class VideoCube():
         lp_frame_lines = frame.copy()
         lp_frame_points = frame.copy()
         lp_frame_key_points = frame.copy()
+
+        # Found out that finding the average color of each polygon takes a considerable amount of time
+        # Consider methods to speed up computation here
         for polygon in polygons:
-            # Reduce the dimensionality of the polygon. We know the intersection 
-            # is for this frame number 
-            polygon = self._remove_temporal_dimension(polygon)
-
-            # Mask view
-            # Create a mask with the polygon
-            fillPoly(self._mask, pts=polygon, color=(255,255,255))
-            # Fetch the average color in within the mask
-            r, g, b, _ = [round(_) for _ in mean(frame, mask=self._mask)]
-            # Fill the polygon on the lp frame with the average color of the mask
-            fillPoly(lp_frame, pts=polygon, color=(r,g,b))
-            fillPoly(self._mask, pts=polygon, color=(0,0,0))
-
-            # Line view
-            # Draw the polygon lines on line view
-            polylines(lp_frame_lines, pts=polygon, isClosed=True, color=(0, 0, 0))
-
-            for point in polygon:
-                circle(lp_frame_points, tuple(point[0]), 2, (0, 0, 0))
-
+            self._process_polygon(polygon, frame, lp_frame, lp_frame_lines, lp_frame_points)
         
         lp_frame_key_points = self._draw_key_points(lp_frame_key_points, frame_number)
-
             
         logger.info("Created low-poly frame.")
         return (lp_frame, lp_frame_lines, lp_frame_points, lp_frame_key_points)
+
+    def _process_polygon(self, polygon, frame, lp_frame, lp_frame_lines, lp_frame_points):
+        polygon = self._remove_temporal_dimension(polygon)
+        mask = zeros([self.height, self.width], uint8)
+        fillPoly(mask, pts=polygon, color=(255,255,255))
+        
+        # TODO: This operation takes a considerable amount of time. Any fixes?
+        r, g, b, _ = [round(_) for _ in mean(frame, mask=mask)]
+
+        fillPoly(lp_frame, pts=polygon, color=(r,g,b))
+        fillPoly(mask, pts=polygon, color=(0,0,0))
+
+        # Line view
+        # Draw the polygon lines on line view
+        polylines(lp_frame_lines, pts=polygon, isClosed=True, color=(0, 0, 0))
+
+        for point in polygon:
+            circle(lp_frame_points, tuple(point[0]), 2, (0, 0, 0))
 
     def _draw_key_points(self, lp_frame, frame_number):
         
