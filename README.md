@@ -7,7 +7,7 @@ This methodology has also been applied for videos, which performs feature detect
 
 LowPolyfy is an application which creates low-poly approximations of video footage using Delaunay tetrahedralization.
 
-For this research project, I will do two thing:
+For this research project, I will do two things:
 1) Design a framework which can create low-poly approximations based on a specified point-placement algorithm
 2) Investigate and design several point placement modules.
 
