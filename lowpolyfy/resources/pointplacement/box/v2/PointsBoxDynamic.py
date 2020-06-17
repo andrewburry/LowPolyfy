@@ -1,7 +1,6 @@
-
+import logging
 from lowpolyfy.resources.pointplacement.box.v2.DynamicBoxBinner import DynamicBoxBinner
 from lowpolyfy.resources.pointplacement.box.utils.FeaturePointCollector import FeaturePointCollector
-import logging
 
 logger = logging.getLogger(__name__)
 

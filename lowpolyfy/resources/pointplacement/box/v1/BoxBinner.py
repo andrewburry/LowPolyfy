@@ -1,7 +1,7 @@
+import logging
 from math import floor, ceil
 from random import uniform
-import numpy as np
-import logging
+from numpy import zeros
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ class BoxBinner():
         logger.info("Bin dimension calculated to be {}".format(self.bin_dimensions))
 
         # Create an empty list for the bins
-        bins = np.zeros((ceil(length/bin_l), ceil(width/bin_w), ceil(height/bin_h)))
+        bins = zeros((ceil(length/bin_l), ceil(width/bin_w), ceil(height/bin_h)))
         self.bins = bins.tolist()
 
     def filter_points(self, points):

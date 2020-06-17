@@ -1,6 +1,6 @@
+import logging
 from numpy.random import randint
 from lowpolyfy.resources.pointplacement.AbstractAlgorithm import AbstractAlgorithm
-import logging
 
 logger = logging.getLogger(__name__)
 

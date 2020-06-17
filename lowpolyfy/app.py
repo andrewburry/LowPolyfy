@@ -1,6 +1,6 @@
+import logging
 from argparse import ArgumentParser
 from lowpolyfy.LowPolyfy import LowPolyfy
-import logging
 from os import makedirs
 
 

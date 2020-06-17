@@ -5,6 +5,7 @@ from numpy import zeros, int32, uint8
 from cv2 import fillPoly, polylines, circle, mean
 from lowpolyfy.resources.geometry.Tetrahedral import Tetrahedral
 from lowpolyfy.resources.videocube.TetrahedralOrganizer import TetrahedralOrganizer
+
 logger = logging.getLogger(__name__)
 
 class VideoCube():

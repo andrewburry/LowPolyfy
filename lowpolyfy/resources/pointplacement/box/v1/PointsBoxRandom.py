@@ -1,9 +1,8 @@
+import logging
 from numpy.random import randint
 from lowpolyfy.resources.pointplacement.AbstractAlgorithm import AbstractAlgorithm
 from lowpolyfy.resources.pointplacement.box.v1.BoxBinner import BoxBinner
-import logging
 from cv2 import goodFeaturesToTrack, CAP_PROP_POS_FRAMES, cvtColor, COLOR_BGR2GRAY
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
