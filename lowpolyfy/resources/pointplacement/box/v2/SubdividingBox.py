@@ -1,4 +1,5 @@
-from random import choice
+from random import choice, randint
+from numpy import array
 
 class SubdividingBox():
     def __init__(self, origin, dimensions, subdivideThreshold):
@@ -9,6 +10,8 @@ class SubdividingBox():
 
         self.boxes = []
         self.points = []
+
+        self.color = (randint(0, 255), randint(0, 255), randint(0, 255))
 
     def insert(self, point):
         # Check if it can be in this box
@@ -102,3 +105,35 @@ class SubdividingBox():
 
         # Return all points
         return self.points
+
+    def fetch_all_boxes(self):
+        if len(self.boxes) > 0:
+            return self.boxes[0].fetch_all_boxes() + self.boxes[1].fetch_all_boxes() + [self]
+        
+        return [self]
+
+    def fetch_end_point_boxes(self):
+        if len(self.boxes) > 0:
+            return self.boxes[0].fetch_end_point_boxes() + self.boxes[1].fetch_end_point_boxes()
+
+        return [self]
+
+    def is_visible_on_frame(self, frame_number):
+        length, _, _ = self.dimensions
+        origin_frame, _, _ = self.origin
+
+        if frame_number < origin_frame or frame_number > origin_frame + length:
+            return False
+
+        return True
+
+    def get_polygon(self):
+        origin = [round(number) for number in self.origin]
+        dimensions = [round(number) for number in self.dimensions]
+
+        p1 = [origin[1]                , origin[2]]
+        p2 = [origin[1] + dimensions[1], origin[2]]
+        p4 = [origin[1]                , origin[2] + dimensions[2]]
+        p3 = [origin[1] + dimensions[1], origin[2] + dimensions[2]]
+
+        return [p1, p2, p3, p4]
