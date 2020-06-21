@@ -1,5 +1,4 @@
 from random import choice, randint
-from numpy import array
 
 class SubdividingBox():
     def __init__(self, origin, dimensions, subdivideThreshold):

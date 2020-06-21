@@ -1,6 +1,6 @@
 import logging
 from cv2 import VideoCapture, VideoWriter, VideoWriter_fourcc, imshow
-from lowpolyfy.resources.utils.video_utils import video_exists, get_video_parameters
+from lowpolyfy.resources.utils.video_utils import video_exists, get_video_parameters, initialize_views_directory
 from lowpolyfy.resources.videocube.VideoCube import VideoCube
 from lowpolyfy.resources.pointplacement.PointPlacer import PointPlacer
 
@@ -28,6 +28,10 @@ class LowPolyfy():
         if (not video_exists(source_path)):
             logger.error("Failed to find a video file at the specified path.")
             return
+        
+        # Initialize the views directory
+        VIEWS_DIRECTORY = "views"
+        initialize_views_directory(VIEWS_DIRECTORY)
 
         # Setting up video reader
         video = VideoCapture(source_path)
@@ -38,10 +42,10 @@ class LowPolyfy():
 
         # Setting up video writer
         fourcc = VideoWriter_fourcc(*'mp4v')
-        video_out = VideoWriter("output.mp4", fourcc, fps, (video_height, video_width))
-        video_out_lines = VideoWriter("output_view_lines.mp4", fourcc, fps, (video_height, video_width))
-        video_out_corners = VideoWriter("output_view_corners.mp4", fourcc, fps, (video_height, video_width))
-        video_out_keypoints = VideoWriter("output_view_keypoints.mp4", fourcc, fps, (video_height, video_width))
+        video_out = VideoWriter(VIEWS_DIRECTORY + "/output.mp4", fourcc, fps, (video_height, video_width))
+        video_out_lines = VideoWriter(VIEWS_DIRECTORY + "/output_view_lines.mp4", fourcc, fps, (video_height, video_width))
+        video_out_corners = VideoWriter(VIEWS_DIRECTORY + "/output_view_corners.mp4", fourcc, fps, (video_height, video_width))
+        video_out_keypoints = VideoWriter(VIEWS_DIRECTORY + "/output_view_keypoints.mp4", fourcc, fps, (video_height, video_width))
         
         # Initialize the video cube according to the point initialization algorithm
         # Exit if points failed to be placed
