@@ -1,0 +1,104 @@
+from random import choice
+
+class SubdividingBox():
+    def __init__(self, origin, dimensions, subdivideThreshold):
+        self.origin = origin
+
+        self.dimensions = dimensions
+        self.subdivideThreshold = subdivideThreshold
+
+        self.boxes = []
+        self.points = []
+
+    def insert(self, point):
+        # Check if it can be in this box
+        if not self._dimension_check(point):
+            return False
+
+        # Check if we have boxes
+        if len(self.boxes) > 0:
+            # TODO: add to boxes instead
+            self._insert_point_in_boxes(point)
+        else:
+            # Just add point to points if we have no boxes
+            # This may involve subdividing
+            self._add_to_self(point)
+        return True
+
+    def _dimension_check(self, point):
+        x, y, z = point
+        # Check to see if the point can be placed in me
+        if ((x >= self.origin[0] and x <= self.origin[0] + self.dimensions[0]) and
+            (y >= self.origin[1] and y <= self.origin[1] + self.dimensions[1]) and
+            (z >= self.origin[2] and z <= self.origin[2] + self.dimensions[2])):
+            return True
+        return False
+    
+    
+    def _add_to_self(self, point):
+        # Add the point to the list of points
+        self.points.append(point)
+
+        # If the box has too many points, subdivide it along the longest axis
+        if len(self.points) > self.subdivideThreshold:
+            self.subdivide()
+        
+        return
+    
+    def subdivide(self):
+        # Subdivide the current box on the longest dimension
+        sides = list(self.dimensions)
+        longestSideIndex = sides.index(max(sides))
+
+        # Now we know which dimension to cut in half
+        sides[longestSideIndex] /= 2
+
+        # Now we can create two boxes, one will be centered on the same origin as the parent
+        # The second will be shifted by half the longest side
+        shiftOrigin = list(self.origin)
+        shiftOrigin[longestSideIndex] += sides[longestSideIndex]
+        box1 = SubdividingBox(self.origin, tuple(sides), self.subdivideThreshold)
+        box2 = SubdividingBox(tuple(shiftOrigin), tuple(sides), self.subdivideThreshold)
+
+        self.boxes.append(box1)
+        self.boxes.append(box2)
+
+        # Now we need to sort the points into their respective boxes
+        self.sortPoints()
+        return
+
+    def sortPoints(self):
+        # Insert the points into boxes
+        for point in self.points:
+            self._insert_point_in_boxes(point)
+
+        # the box does not need to keep track of points anymore
+        self.points = []
+        return
+
+    def _insert_point_in_boxes(self, point):
+        # Try to insert into box0, if it fails insert into box1
+        # Note: they perform dimensional checks themselves
+        if not self.boxes[0].insert(point):
+            return self.boxes[1].insert(point)
+        return False
+
+    def fetch_random_points(self):
+        # Recursively call fetch points on sub boxes
+        if len(self.boxes) > 0:
+            return self.boxes[0].fetch_random_points() + self.boxes[1].fetch_random_points()
+
+        # Select a random point that the current box contains
+        if len(self.points) > 0:
+            return [choice(self.points)]
+
+        # Empty box
+        return []
+
+    def fetch_all_points(self):
+        # Recursively call fetch points on sub boxes
+        if len(self.boxes) > 0:
+            return self.boxes[0].fetch_all_points() + self.boxes[1].fetch_all_points()
+
+        # Return all points
+        return self.points
