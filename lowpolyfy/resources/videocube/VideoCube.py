@@ -108,13 +108,12 @@ class VideoCube():
     def _process_polygon(self, polygon, frame, lp_frame, lp_frame_lines, lp_frame_points):
         polygon = self._remove_temporal_dimension(polygon)
         mask = zeros([self.height, self.width], uint8)
-        fillPoly(mask, pts=polygon, color=(255,255,255))
-        
+        fillPoly(mask, polygon, 255)
+
         # TODO: This operation takes a considerable amount of time. Any fixes?
         r, g, b, _ = [round(_) for _ in mean(frame, mask=mask)]
 
-        fillPoly(lp_frame, pts=polygon, color=(r,g,b))
-        fillPoly(mask, pts=polygon, color=(0,0,0))
+        fillPoly(lp_frame, pts=polygon, color=(r, g, b))
 
         # Line view
         # Draw the polygon lines on line view

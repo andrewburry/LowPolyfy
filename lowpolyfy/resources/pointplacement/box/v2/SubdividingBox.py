@@ -95,6 +95,7 @@ class SubdividingBox():
             return [choice(self.points)]
 
         # Empty box
+        # TODO: maybe generate a point
         return []
 
     def fetch_all_points(self):
@@ -136,3 +137,6 @@ class SubdividingBox():
         p3 = [origin[1] + dimensions[1], origin[2] + dimensions[2]]
 
         return [p1, p2, p3, p4]
+
+    def generate_random_point(self):
+        return

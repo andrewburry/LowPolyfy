@@ -72,24 +72,10 @@ class PointsBoxDynamic():
     def _slice_frame(self, endpointBoxes, frame, frameNumber):
         frame_box_view = frame.copy()
 
-        polygons = []
-        colors = []
-        # Extract the boxes to draw on this frame
+        # Extract and draw the boxes on the frame
         for box in endpointBoxes:
-            if box.is_visible_on_frame(frameNumber):
-                polygons.append(box.get_polygon())
-                colors.append(box.color)
-
-        # Draw the polygons on the frame
-        for i in range(len(polygons)):
-            polygon = array([polygons[i]])
-            color = colors[i]
-
-            mask = zeros([self.height, self.width], uint8)
-            fillPoly(mask, pts=polygon, color=(255,255,255))
-            
-            fillPoly(frame_box_view, pts=polygon, color=color)
-            fillPoly(mask, pts=polygon, color=(0,0,0))
+            if box.is_visible_on_frame(frameNumber):                
+                fillPoly(frame_box_view, pts=array([box.get_polygon()]), color=box.color)
 
         return frame_box_view
 

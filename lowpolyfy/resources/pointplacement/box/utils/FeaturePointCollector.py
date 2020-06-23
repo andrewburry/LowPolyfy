@@ -3,9 +3,9 @@ from cv2 import goodFeaturesToTrack, CAP_PROP_POS_FRAMES, cvtColor, COLOR_BGR2GR
 
 class FeaturePointCollector():
     def __init__(self):
-        self.maxCorners = 1000
+        self.maxCorners = 5000 # 1000
         self.qualityLevel = 0.0001
-        self.minDistance = 10
+        self.minDistance = 1 #10
         
     def generate_keypoints_from_features(self, video):
         points = []
