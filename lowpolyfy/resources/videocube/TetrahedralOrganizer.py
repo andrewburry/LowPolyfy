@@ -2,7 +2,7 @@ from numpy import empty
 
 class TetrahedralOrganizer():
     def __init__(self, length):
-        self.bins = list(empty(length))
+        self.bins = [0] * (length + 1)
 
     def insert(self, tetrahedrals):
         # Insert each tetrahedral into the frame bins that they overlap

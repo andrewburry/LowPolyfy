@@ -1,7 +1,7 @@
 import unittest
 from lowpolyfy.resources.pointplacement.random.PointsRandom import PointsRandom
 
-class TestPointsRandom(unittest.TestCase):
+class test_pointsrandom(unittest.TestCase):
 
     def test_generate_points(self):
         dimensions = (10, 10, 10)

@@ -1,7 +1,7 @@
 import unittest
 from lowpolyfy.resources.pointplacement.box.v1.BoxBinner import BoxBinner
 
-class test_boxbinner(unittest.TestCase):
+class TestBoxBinner(unittest.TestCase):
 
     def test_initialize(self):
         binner = BoxBinner(10, 10, 10, 1000)

@@ -2,7 +2,7 @@ import unittest
 from random import randint
 from lowpolyfy.resources.pointplacement.box.v2.SubdividingBox import SubdividingBox
 
-class test_subdividingbox(unittest.TestCase):
+class TestSubdividingBox(unittest.TestCase):
 
     def setUp(self):
         origin = (0,0,0)
