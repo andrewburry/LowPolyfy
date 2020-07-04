@@ -42,7 +42,7 @@ class SubdividingBox():
         self.points.append(point)
 
         # If the box has too many points, subdivide it along the longest axis
-        if len(self.points) > self.subdivideThreshold:
+        if len(self.points) >= self.subdivideThreshold:
             self.subdivide()
         
         return
