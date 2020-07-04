@@ -28,3 +28,6 @@ pip install -r requirements.txt -e .
 
 ## Running:
 python lowpolyfy -s [SOURCE] -a [ALGORITHMNAME] -n [NUMPOINTS]
+
+## Running Tests
+python -m unittest discover -v
