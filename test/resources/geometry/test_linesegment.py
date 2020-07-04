@@ -1,7 +1,7 @@
 import unittest
 from lowpolyfy.resources.geometry.LineSegment import LineSegment
 
-class TestLineSegment(unittest.TestCase):
+class test_linesegment(unittest.TestCase):
 
     def test_intersects(self):
         p0 = (1, 1, 1)

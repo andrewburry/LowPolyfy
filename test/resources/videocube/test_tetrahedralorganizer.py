@@ -4,11 +4,11 @@ from numpy import empty
 from lowpolyfy.resources.videocube.TetrahedralOrganizer import TetrahedralOrganizer
 from lowpolyfy.resources.geometry.Tetrahedral import Tetrahedral
 
-class TestTetrahedralOrganizer(unittest.TestCase):
+class test_tetrahedralorganizer(unittest.TestCase):
 
     def _create_tetrahedrals(self, numTetrahedrals, numFrames):
         tetrahedrals = []
-        expectedBinSizes = self.bins = list(empty(numFrames))
+        expectedBinSizes = [0] * numFrames
         for i in range(numTetrahedrals):
             # Generate 4 points
             p0 = (randint(0, numFrames - 1), randint(0, numFrames - 1), randint(0, numFrames - 1))

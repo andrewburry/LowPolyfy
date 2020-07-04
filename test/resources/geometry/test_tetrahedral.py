@@ -1,7 +1,7 @@
 import unittest
 from lowpolyfy.resources.geometry.Tetrahedral import Tetrahedral
 
-class TestTetrahedral(unittest.TestCase):
+class test_tetrahedral(unittest.TestCase):
     def test_tetrahedral_initialized(self):
         p0 = [0, 0, 0]
         p1 = [2, 2, 2]
