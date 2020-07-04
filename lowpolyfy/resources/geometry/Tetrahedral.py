@@ -7,7 +7,7 @@ class Tetrahedral():
         self.corners = corners
         self._create_tetrahedral_line_segments(corners)
 
-    def frames_intersected(self):
+    def frames_intersected(self) -> list:
         """Find all the frames which a tetrahedral intersects """
         points = []
         for line in self.lines:
@@ -16,7 +16,7 @@ class Tetrahedral():
         # Remove duplicates
         return list(dict.fromkeys(points))
 
-    def _create_tetrahedral_line_segments(self, corners):
+    def _create_tetrahedral_line_segments(self, corners: list) -> None:
         """
         An initialization function for the tetrahedral to create line segments 
         between the tetrahedral corners
@@ -31,7 +31,7 @@ class Tetrahedral():
             self.lines.append(line)
         return
 
-    def _check_frame_bounded(self, points, frame_number):
+    def _check_frame_bounded(self, points: list, frame_number: int) -> bool:
         """A method to check to see if a frame lies somewhere within the input points"""
         # Ensure that points are crossing the frame number at least once
         lower_bounded = False

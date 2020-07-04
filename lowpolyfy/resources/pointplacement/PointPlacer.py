@@ -17,7 +17,7 @@ class PointPlacer():
         self._algorithm = None
         self.video = video
 
-    def set_algorithm(self, name):
+    def set_algorithm(self, name: str) -> bool:
         if (name not in self._ALGORTIHMS.keys()):
             logger.error("Could not find an algorithm with the name {}.".format(name))
             return False
@@ -25,7 +25,7 @@ class PointPlacer():
         self._algorithm = self._ALGORTIHMS[name]
         return True
 
-    def place_points(self, video_cube, num_points):
+    def place_points(self, video_cube, num_points: int):
         if not self._algorithm:
             logger.eror("You must first set an algorithm to run.")
             return
