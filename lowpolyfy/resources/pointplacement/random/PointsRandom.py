@@ -5,14 +5,14 @@ from lowpolyfy.resources.pointplacement.AbstractAlgorithm import AbstractAlgorit
 logger = logging.getLogger(__name__)
 
 class PointsRandom(AbstractAlgorithm):
-    def _generate_point(self, length, width, height):
+    def _generate_point(self, length: int, width: int, height: int) -> list:
         return [
             randint(0, length),
             randint(0, width),
             randint(0, height),
         ]
 
-    def generate_points(self, dimensions, num_points, video):
+    def generate_points(self, dimensions: tuple, num_points: int, video) -> list:
         logger.info("Generating {} random points within a space of dimension {}".format(num_points, dimensions))
         l, w, h = dimensions
 

@@ -6,19 +6,18 @@ from numpy import zeros
 logger = logging.getLogger(__name__)
 
 class BoxBinner():
-
-    def __init__(self, length, width, height, num_bins):
+    def __init__(self, length, width, height, numBins):
         self.dimensions = (length, width, height)
-        self.num_bins = num_bins
+        self.numBins = numBins
 
-        logger.info("Creating a box of dimension {} containing {} bins".format(self.dimensions, num_bins))
+        logger.info("Creating a box of dimension {} containing {} bins".format(self.dimensions, numBins))
         
         # We need to calculate the dimensions of the bins. 
         # They will have the same proportions as the original cube.
 
         # Calculate the number of elements each will have
         total_elements = length * width * height
-        box_elements = total_elements / num_bins
+        box_elements = total_elements / numBins
         
         # Find the ratios of the bin
         ratio_lw = length / width
@@ -29,16 +28,16 @@ class BoxBinner():
         bin_w = (box_elements / (ratio_lw * ratio_hw)) ** (1./3.)
         bin_l = ratio_lw * bin_w
         bin_h = ratio_hw * bin_w
-        self.bin_dimensions = (bin_l, bin_w, bin_h)
+        self.binDimensions = (bin_l, bin_w, bin_h)
 
-        logger.info("Bin dimension calculated to be {}".format(self.bin_dimensions))
+        logger.info("Bin dimension calculated to be {}".format(self.binDimensions))
 
         # Create an empty list for the bins
         bins = zeros((ceil(length/bin_l), ceil(width/bin_w), ceil(height/bin_h)))
         self.bins = bins.tolist()
 
     def filter_points(self, points):
-        length, width, height = self.bin_dimensions
+        length, width, height = self.binDimensions
         logger.info("Inserting {} points into the box binner".format(len(points)))
         for point in points:
             x, y, z = tuple(point)
@@ -57,7 +56,7 @@ class BoxBinner():
     def _fetch_filtered_points(self):
         # Fetch the dimensions of the box, bin and datastructure
         box_l, box_w, box_h = self.dimensions
-        bin_l, bin_w, bin_h = self.bin_dimensions
+        bin_l, bin_w, bin_h = self.binDimensions
         l,     w,     h     = round(box_l/bin_l), round(box_w/bin_w), round(box_h/bin_h)
 
         points = []
@@ -68,7 +67,7 @@ class BoxBinner():
                     entry = self.bins[i][j][k]
 
                     # Generate an arbitrary point for the bins that were never modified
-                    # Note: we still have the requirement of num_bins number of bins
+                    # Note: we still have the requirement of numBins number of bins
                     if (type(entry) is not list):
                         entry = self._generate_point(tuple([i, j, k]))
 
@@ -78,7 +77,7 @@ class BoxBinner():
 
     def _generate_point(self, index):
         i, j, k = index
-        bin_l, bin_w, bin_h = self.bin_dimensions
+        bin_l, bin_w, bin_h = self.binDimensions
 
         lower_l = bin_l * i
         lower_w = bin_w * j
