@@ -1,5 +1,5 @@
 # LowPolyfy
-Low-poly object representations have become very popular art style in recent years. This technique decomposes an image into a mesh of connected polygons. Delaunay triangulation is a well known algorithm which can perform this abstraction. Typical algorithms for creating low-poly image representations involve feature detection followed by Delaunay triangulation.
+Low-poly object representations have become very popular art style in recent years. This artistic technique decomposes an image into a mesh of connected polygons. Delaunay triangulation is a well known algorithm which can perform this abstraction. Typical algorithms for creating low-poly image representations involve feature detection followed by Delaunay triangulation.
 
 ![Parakeet](https://i.imgur.com/uTHlhGl.jpg) ![Parakeet Low Poly](https://i.imgur.com/8mc7zi2.png)
 
