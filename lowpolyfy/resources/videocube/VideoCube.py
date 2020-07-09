@@ -49,10 +49,6 @@ class VideoCube():
 
         self._organizer.insert(self._tetrahedrals)
 
-        # Clean up the points that were placed in the video cube.
-        # We are only concerned about the tetrahedrals now.
-        #del self._points
-
         logger.info("Created {} tetrahedrals in the video cube".format(len(self._tetrahedrals)))
         return
 
@@ -71,7 +67,7 @@ class VideoCube():
             frame_polygons[2] = frame_polygons[3]
             frame_polygons[3] = tmp
         
-        return array([frame_polygons])
+        return frame_polygons
 
     def slice_cube(self, frame, frame_number):
         # Now that I have converted each of the simplices, 
@@ -86,7 +82,7 @@ class VideoCube():
         for tetrahedral in frame_tets:
             pnts = tetrahedral.intersection(frame_number)
             logger.debug("Found {} intersection points for tetrahedral {}".format(len(pnts), tetrahedral))
-            if pnts:
+            if len(pnts) >= 2:
                 polygons.append(pnts)
         
         logger.info("Drawing {} polygons on the low-poly frame.".format(len(polygons)))
@@ -105,22 +101,31 @@ class VideoCube():
         logger.info("Created low-poly frame.")
         return (lp_frame, lp_frame_lines, lp_frame_points, lp_frame_key_points)
 
+    def _find_average_color(self, polygon, frame):
+        r, g, b = (0, 0, 0)
+        numPoints = len(polygon)
+        for x, y in polygon:
+            # Find the corresponding pixel
+            _r, _g, _b = tuple(list(frame[y - 1][x - 1]))
+
+            r += _r
+            g += _g
+            b += _b
+
+        return (round(r/numPoints), round(g/numPoints), round(b/numPoints))
+
     def _process_polygon(self, polygon, frame, lp_frame, lp_frame_lines, lp_frame_points):
         polygon = self._remove_temporal_dimension(polygon)
-        mask = zeros([self.height, self.width], uint8)
-        fillPoly(mask, polygon, 255)
+        r, g, b = self._find_average_color(polygon, frame)
 
-        # TODO: This operation takes a considerable amount of time. Any fixes?
-        r, g, b, _ = [round(_) for _ in mean(frame, mask=mask)]
-
-        fillPoly(lp_frame, pts=polygon, color=(r, g, b))
+        fillPoly(lp_frame, pts=array([polygon]), color=(r, g, b))
 
         # Line view
         # Draw the polygon lines on line view
-        polylines(lp_frame_lines, pts=polygon, isClosed=True, color=(0, 0, 0))
+        polylines(lp_frame_lines, pts=array([polygon]), isClosed=True, color=(0, 0, 0))
 
         for point in polygon:
-            circle(lp_frame_points, tuple(point[0]), 2, (0, 0, 0))
+            circle(lp_frame_points, tuple(point), 2, (0, 0, 0))
 
     def _draw_key_points(self, lp_frame, frame_number):
         

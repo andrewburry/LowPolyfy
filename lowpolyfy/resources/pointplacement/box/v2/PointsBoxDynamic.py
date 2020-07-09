@@ -12,8 +12,9 @@ class PointsBoxDynamic():
         _, self.width, self.height = dimensions
 
         # Generate points from features in the video
+        logger.info("Generating feature points within the video cube of dimensions {}".format(dimensions))
         points = FeaturePointCollector().generate_keypoints_from_features(video)
-        logger.info("Generated {} feature points within the video cube of dimensions".format(len(points), dimensions))
+        logger.info("Generated {} feature points within the video cube of dimensions {}".format(len(points), dimensions))
         
         # Create the box binner
         box = SubdividingBox((0,0,0), dimensions, numPoints)
