@@ -17,7 +17,7 @@ class PointsBoxDynamic():
         logger.info("Generated {} feature points within the video cube of dimensions {}".format(len(points), dimensions))
         
         # Create the box binner
-        box = SubdividingBox((0,0,0), dimensions, numPoints)
+        box = SubdividingBox(origin=(0,0,0), dimensions=dimensions, subdivideThreshold=numPoints, depthThreshold=14, depth=0)
 
         # Place points into the binner
         logger.info("Inserting {} points into the subdividing box".format(len(points)))
@@ -35,7 +35,6 @@ class PointsBoxDynamic():
         logger.info("Returning {} points from the subdividing box".format(len(points)))
 
         # Generate a view
-        
         logger.info("Generating the Spatial Subdivision Box view")
         self.generate_view(endpointBoxes, video)
         logger.info("Generated the Spatial Subdivision Box view")

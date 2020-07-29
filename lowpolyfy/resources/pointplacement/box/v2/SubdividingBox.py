@@ -1,14 +1,16 @@
 from random import choice, randint
 
 class SubdividingBox():
-    def __init__(self, origin, dimensions, subdivideThreshold):
+    def __init__(self, origin, dimensions, subdivideThreshold, depthThreshold, depth):
         self.origin = origin
 
         self.dimensions = dimensions
         self.subdivideThreshold = subdivideThreshold
+        self.depthThreshold = depthThreshold
 
         self.boxes = []
         self.points = []
+        self.depth = depth
 
         self.color = (randint(0, 255), randint(0, 255), randint(0, 255))
 
@@ -42,7 +44,7 @@ class SubdividingBox():
         self.points.append(point)
 
         # If the box has too many points, subdivide it along the longest axis
-        if len(self.points) >= self.subdivideThreshold:
+        if len(self.points) >= self.subdivideThreshold and self.depth <= self.depthThreshold:
             self.subdivide()
         
         return
@@ -59,8 +61,8 @@ class SubdividingBox():
         # The second will be shifted by half the longest side
         shiftOrigin = list(self.origin)
         shiftOrigin[longestSideIndex] += sides[longestSideIndex]
-        box1 = SubdividingBox(self.origin, tuple(sides), self.subdivideThreshold)
-        box2 = SubdividingBox(tuple(shiftOrigin), tuple(sides), self.subdivideThreshold)
+        box1 = SubdividingBox(self.origin, tuple(sides), self.subdivideThreshold, self.depthThreshold, self.depth + 1)
+        box2 = SubdividingBox(tuple(shiftOrigin), tuple(sides), self.subdivideThreshold, self.depthThreshold, self.depth + 1)
 
         self.boxes.append(box1)
         self.boxes.append(box2)

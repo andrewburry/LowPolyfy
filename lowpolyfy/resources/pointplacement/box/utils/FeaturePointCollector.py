@@ -1,10 +1,10 @@
-from cv2 import goodFeaturesToTrack, CAP_PROP_POS_FRAMES, cvtColor, COLOR_BGR2GRAY
+from cv2 import goodFeaturesToTrack, CAP_PROP_POS_FRAMES, cvtColor, COLOR_BGR2GRAY, medianBlur
 
 
 class FeaturePointCollector():
     def __init__(self):
-        self.maxCorners = 5000 # 1000
-        self.qualityLevel = 0.0001
+        self.maxCorners = 1000 # 1000
+        self.qualityLevel = 0.00001
         self.minDistance = 1 #10
         
     def generate_keypoints_from_features(self, video):
@@ -21,7 +21,10 @@ class FeaturePointCollector():
                 break
             
             gray = cvtColor(frame, COLOR_BGR2GRAY)
-            discovered_points = goodFeaturesToTrack(gray, self.maxCorners, self.qualityLevel, self.minDistance)
+
+            blurred = medianBlur(gray, 5)
+
+            discovered_points = goodFeaturesToTrack(blurred, self.maxCorners, self.qualityLevel, self.minDistance)
             for point in discovered_points:
                 y, x = point.ravel()
                 points.append([frame_number, int(y), int(x)])

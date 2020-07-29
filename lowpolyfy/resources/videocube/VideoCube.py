@@ -114,10 +114,27 @@ class VideoCube():
 
         return (round(r/numPoints), round(g/numPoints), round(b/numPoints))
 
+    def _find_centroid_color(self, polygon, frame):
+        c_x = 0
+        c_y = 0
+        # Average the x, and y values of the polygon points
+        for x, y in polygon:
+            c_x += x
+            c_y += y
+
+        c_x = round(c_x/len(polygon))
+        c_y = round(c_y/len(polygon))
+
+        # Extract the frame data at the centroid location
+        r, g, b = tuple(list(frame[y - 1][x - 1]))
+
+        # Convert the int64 datatypes to int
+        return (int(r), int(g), int(b))
+            
+
     def _process_polygon(self, polygon, frame, lp_frame, lp_frame_lines, lp_frame_points):
         polygon = self._remove_temporal_dimension(polygon)
         r, g, b = self._find_average_color(polygon, frame)
-
         fillPoly(lp_frame, pts=array([polygon]), color=(r, g, b))
 
         # Line view
