@@ -134,7 +134,10 @@ class VideoCube():
 
     def _process_polygon(self, polygon, frame, lp_frame, lp_frame_lines, lp_frame_points):
         polygon = self._remove_temporal_dimension(polygon)
-        r, g, b = self._find_average_color(polygon, frame)
+        mask = zeros([self.height, self.width], uint8)
+        fillPoly(mask, array([polygon]), 255)
+        r, g, b, _ = [round(_) for _ in mean(frame, mask=mask)]
+        #r, g, b = self._find_average_color(polygon, frame)
         fillPoly(lp_frame, pts=array([polygon]), color=(r, g, b))
 
         # Line view

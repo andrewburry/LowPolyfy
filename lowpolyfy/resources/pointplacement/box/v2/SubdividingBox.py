@@ -96,9 +96,17 @@ class SubdividingBox():
         if len(self.points) > 0:
             return [choice(self.points)]
 
-        # Empty box
-        # TODO: maybe generate a point
-        return []
+        return self.generate_random_point()
+
+    def generate_random_point(self):
+        x0, y0, z0 = self.origin
+        x1, y1, z1 = self.dimensions
+
+        x = randint(int(x0), int(x1 + x0))
+        y = randint(int(y0), int(y1 + y0))
+        z = randint(int(z0), int(z1 + z0))
+
+        return [[x, y, z]]
 
     def fetch_all_points(self):
         # Recursively call fetch points on sub boxes
@@ -139,6 +147,3 @@ class SubdividingBox():
         p3 = [origin[1] + dimensions[1], origin[2] + dimensions[2]]
 
         return [p1, p2, p3, p4]
-
-    def generate_random_point(self):
-        return

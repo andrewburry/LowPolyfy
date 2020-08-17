@@ -1,4 +1,4 @@
-from cv2 import goodFeaturesToTrack, CAP_PROP_POS_FRAMES, cvtColor, COLOR_BGR2GRAY, medianBlur
+from cv2 import goodFeaturesToTrack, CAP_PROP_POS_FRAMES, cvtColor, COLOR_BGR2GRAY, medianBlur, imshow, waitKey
 
 
 class FeaturePointCollector():
@@ -21,8 +21,7 @@ class FeaturePointCollector():
                 break
             
             gray = cvtColor(frame, COLOR_BGR2GRAY)
-
-            blurred = medianBlur(gray, 5)
+            blurred = medianBlur(gray, 31)
 
             discovered_points = goodFeaturesToTrack(blurred, self.maxCorners, self.qualityLevel, self.minDistance)
             for point in discovered_points:
